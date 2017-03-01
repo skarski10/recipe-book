@@ -6,19 +6,19 @@ Check to see if students table is empty
 * **Output:** true
 
 Program recognizes two recipes instances as equal if they have the same name
-* **Input:**  Meatballs,  Meatballs
+* **Input:**  Ham,  Ham
 * **Output:** true
 
 Program will save entries into the recipes table
-* **Input:** Biscuits and gravy
-* **Output:** Kory
+* **Input:** Ham
+* **Output:** Ham
 
 Program will return true if a recipe has a unique id and has been saved to an object
-* **Input:** Chicken Broccoli Casserole
+* **Input:** Ham
 * **Output:** true
 
 Program will return true if the recipe item has been found in the database
-* **Input:** Hamburgers
+* **Input:** Ham
 * **Output:** true
 
 Check to see if categories table is empty

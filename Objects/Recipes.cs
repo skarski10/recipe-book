@@ -33,8 +33,8 @@ namespace Cookbook
             {
                 int recipeId = rdr.GetInt32(0);
                 string recipeName = rdr.GetString(1);
-                string recipeDescription = rdr. GetString(2);
-                string recipeInstructions = rdr. GetString(3);
+                string recipeDescription = rdr.GetString(2);
+                string recipeInstructions = rdr.GetString(3);
                 Recipe newRecipe = new Recipe(recipeName, recipeDescription, recipeInstructions, recipeId);
                 allRecipes.Add(newRecipe);
             }
@@ -49,10 +49,87 @@ namespace Cookbook
             return allRecipes;
         }
 
+        public override bool Equals(System.Object otherRecipe)
+        {
+            if (!(otherRecipe is Recipe))
+            {
+                return false;
+            }
+            else
+            {
+                Recipe newRecipe = (Recipe) otherRecipe;
+                bool nameEquality = this.GetRecipeName()  == newRecipe.GetRecipeName();
+                return (nameEquality);
+            }
+        }
+
+        public void Save()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO recipes(name, description, instructions) OUTPUT INSERTED.id VALUES (@RecipeName, @RecipeDescription, @RecipeInstructions);", conn);
+
+            SqlParameter nameParameter = new SqlParameter("@RecipeName", this.GetRecipeName());
+            SqlParameter descriptionParameter = new SqlParameter("@RecipeDescription", this.GetDescription());
+            SqlParameter instructionsParameter = new SqlParameter("@RecipeInstructions", this.GetInstructions());
+
+            cmd.Parameters.Add(nameParameter);
+            cmd.Parameters.Add(descriptionParameter);
+            cmd.Parameters.Add(instructionsParameter);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+            {
+                this._id = rdr.GetInt32(0);
+            }
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+        }
 
 
 
+        public static Recipe Find(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
 
+            SqlCommand cmd = new SqlCommand("SELECT * FROM recipes WHERE id = @RecipeId;", conn);
+            SqlParameter RecipeIdParameter = new SqlParameter("@RecipeId", id.ToString());
+            cmd.Parameters.Add(RecipeIdParameter);
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundRecipeId = 0;
+            string foundRecipeName = null;
+            string foundRecipeDescription = null;
+            string foundRecipeInstructions = null;
+
+            while(rdr.Read())
+            {
+                foundRecipeId = rdr.GetInt32(0);
+                foundRecipeName = rdr.GetString(1);
+                foundRecipeDescription = rdr.GetString(2);
+                foundRecipeInstructions = rdr.GetString(3);
+            }
+            Recipe foundRecipe = new Recipe(foundRecipeName, foundRecipeDescription, foundRecipeInstructions, foundRecipeId);
+
+            if(rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+            return foundRecipe;
+        }
 
 
 
@@ -76,11 +153,11 @@ namespace Cookbook
         }
         public static void DeleteAll()
         {
-          SqlConnection conn = DB.Connection();
-          conn.Open();
-          SqlCommand cmd = new SqlCommand("DELETE FROM recipes;", conn);
-          cmd.ExecuteNonQuery();
-          conn.Close();
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("DELETE FROM recipes;", conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }

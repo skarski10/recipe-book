@@ -6,9 +6,14 @@ using System.Data.SqlClient;
 
 namespace Cookbook
 {
-    public class RecipeTest
+    public class RecipeTest : IDisposable
     {
-        public void StudentTest()
+
+        public static Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+        public static Recipe secondRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+
+
+        public RecipeTest()
         {
             DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=cookbook_test;Integrated Security=SSPI;";
         }
@@ -17,10 +22,75 @@ namespace Cookbook
         public void RecipeDatabaseEmpty()
         {
             //Arrange, act
-           int result = Recipe.GetAllRecipes().Count;
+            int result = Recipe.GetAllRecipes().Count;
 
-           //Assert
-           Assert.Equal(0,result);
+            //Assert
+            Assert.Equal(0,result);
+        }
+
+        [Fact]
+        public void Test_EqualOverrideTrueForSameDescription()
+        {
+            //Arrange, Act
+
+            var thirdRecipe = secondRecipe;
+
+            Assert.Equal(firstRecipe, thirdRecipe);
+            //Assert
+        }
+
+        [Fact]
+        public void Test_SaveToDatabase()
+        {
+            // Arrange
+            Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+            firstRecipe.Save();
+
+            // Act
+            List<Recipe> result = Recipe.GetAllRecipes();
+            List<Recipe> testList = new List<Recipe>{firstRecipe};
+
+            // Assert
+            Assert.Equal(testList, result);
+        }
+
+        [Fact]
+        public void Test_SaveAssignsIdToObject()
+        {
+            //Arrange
+            firstRecipe.Save();
+
+            //Act
+            Recipe testRecipe = Recipe.GetAllRecipes()[0];
+
+            int result = firstRecipe.GetRecipeId();
+            int testId = testRecipe.GetRecipeId();
+
+            //Assert
+            Assert.Equal(testId, result);
+        }
+
+
+        [Fact]
+        public void Test_Find_FindsRecipeinDatablase()
+        {
+            //Arrange
+            firstRecipe.Save();
+            //Act
+            Recipe foundRecipe = Recipe.Find(firstRecipe.GetRecipeId());
+
+            //Asswert
+            Assert.Equal(firstRecipe, foundRecipe);
+        }
+
+
+
+
+
+        public void Dispose()
+        {
+
+            Recipe.DeleteAll();
         }
     }
 }
