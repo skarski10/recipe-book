@@ -131,6 +131,62 @@ namespace Cookbook
             return foundRecipe;
         }
 
+        public void AddCategory(Category newCategory)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO categories_recipes (recipes_id, categories_id) VALUES (@RecipeId, @CategoryId);", conn);
+
+            SqlParameter categoryIdParameter = new SqlParameter ("@CategoryId", newCategory.GetCategoryId());
+            cmd.Parameters.Add(categoryIdParameter);
+
+            SqlParameter recipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId());
+            cmd.Parameters.Add(recipeIdParameter);
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+        }
+
+        public List<Category> GetCategories()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT categories.* FROM recipes JOIN recipes_categories ON (recipes.id = recipes_categories.recipes_id) JOIN categories ON (recipes_categories.categories_id = categories.id) WHERE recipes.id = @RecipeId;", conn);
+
+            SqlParameter RecipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId().ToString());
+
+            cmd.Parameters.Add(RecipeIdParameter);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Category> newList = new List<Category>{};
+
+            while(rdr.Read())
+            {
+                int categoryId = rdr.GetInt32(0);
+                string categoryName = rdr.GetString(1);
+
+                Category newCategory = new Category(categoryName, categoryId);
+                newList.Add(newCategory);
+            }
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+            return newList;
+
+        }
+
 
 
 

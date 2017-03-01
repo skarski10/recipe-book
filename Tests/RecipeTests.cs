@@ -11,6 +11,7 @@ namespace Cookbook
 
         public static Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
         public static Recipe secondRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+        public static Category firstCategory = new Category("Dinner");
 
 
         public RecipeTest()
@@ -83,13 +84,28 @@ namespace Cookbook
             Assert.Equal(firstRecipe, foundRecipe);
         }
 
+        [Fact]
+        public void Test_GetRecipes_ReturnsAllRecipesInACategory()
+        {
+            //Arrange
+            firstCategory.Save();
+            firstRecipe.Save();
+
+            firstCategory.AddRecipe(firstRecipe);
+            List<Recipe> savedRecipes = firstCategory.GetRecipes();
+            List<Recipe> firstList = new List<Recipe> {firstRecipe};
+
+            //Assert
+            Assert.Equal(firstList, savedRecipes);
+        }
+
 
 
 
 
         public void Dispose()
         {
-
+            Category.DeleteAll();
             Recipe.DeleteAll();
         }
     }

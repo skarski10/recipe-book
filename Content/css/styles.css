@@ -1,0 +1,30 @@
+.btn {
+    background-color: #8D82E1;
+    color: #B7FDF4;
+    margin-bottom: 5px;
+    text-align: center;
+    border: solid #CA8DF2;
+    box-shadow: rgba(0, 0, 0, 0.25) -2px 2px;
+}
+
+.btn:hover {
+    background-color: #C14C06;
+    border: solid #AD7F43;
+    color: 	#C79B7B;
+}
+
+body {
+    text-align: center;
+}
+
+body {
+    background-image: url(background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#elzarpic {
+    opacity: .9;
+    border-radius: 10px;
+}

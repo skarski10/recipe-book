@@ -74,11 +74,24 @@ namespace Cookbook
             firstCategory.Save();
             //Act
             Category foundCategory = Category.Find(firstCategory.GetCategoryId());
-            Console.WriteLine(firstCategory.GetCategoryId());
-            Console.WriteLine(foundCategory.GetCategoryId());
+
             //Asswert
             Assert.Equal(firstCategory, foundCategory);
         }
+
+        public void Test_GetCategories_ReturnsAllCategoriesForARecipe()
+       {
+           //Arrange
+           firstRecipe.Save();
+           firstCategory.Save();
+
+           firstRecipe.AddCategory(firstCategory);
+           List<Category> savedCategories = firstRecipe.GetCategories();
+           List<Category> firstList = new List<Category> {firstCategory};
+
+           //Assert
+           Assert.Equal(firstList, savedCategories);
+       }
 
 
 
@@ -89,6 +102,7 @@ namespace Cookbook
         public void Dispose()
         {
             Category.DeleteAll();
+            Recipe.DeleteAll();
         }
     }
 }
