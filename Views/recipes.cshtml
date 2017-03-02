@@ -1,19 +1,28 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
-<div class="">
+<div class="row">
     <form class="" action="/recipes" method="post">
         <input type="text" name="recipe-name" placeholder="Recipe name">
         <input type="text" name="recipe-description" placeholder="Describe this dish">
         <input type="text" name="recipe-instructions" placeholder="cooking instructions">
+        <select class="" name="assign-category" placeholder="Assign a category">
+        @foreach(var category in @Model["categories"])
+        {
+                <option value='@category.GetCategoryId()'>@category.GetCategoryName()</option>
+        }
+        </select>
         <br>
         <button type="submit" name="button" class="btn btn-sm">Add Recipe</button>
     </form>
-
 </div>
 
-@foreach(var recipe in Model)
-{
-    <a href="/recipes/@recipe.GetRecipeId()/@recipe.GetRecipeName()">@recipe.GetRecipeName()</a>
-    <p>@recipe.GetDescription()</p>
-}
+<div class="row">
+    <ol>
+        @foreach(var recipe in @Model["recipe"])
+        {
+            <a href="/recipe/@recipe.GetRecipeId()/@recipe.GetRecipeName()">@recipe.GetRecipeName()</a>
+            <p>@recipe.GetDescription()</p>
+        }
+    </ol>
+</div>

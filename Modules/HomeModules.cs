@@ -16,14 +16,25 @@ namespace Cookbook
             };
 
             Get["/recipes"] = _ => {
+                Dictionary<string, object> model = new Dictionary<string, object>();
                 List<Recipe> allRecipes = Recipe.GetAllRecipes();
-                return View["recipes.cshtml", allRecipes];
+                List<Category> allCategories = Category.GetAllCategories();
+                model.Add("recipe", allRecipes);
+                model.Add("categories", allCategories);
+                return View["recipes.cshtml", model];
             };
             Post["/recipes"] = _ => {
+                Dictionary<string, object> model = new Dictionary<string, object>();
                 Recipe newRecipe = new Recipe(Request.Form["recipe-name"], Request.Form["recipe-description"], Request.Form["recipe-instructions"]);
+                Category newCategory = Category.Find(Request.Form["assign-category"]);
                 newRecipe.Save();
+                newRecipe.AddCategory(newCategory);
+                List<Category> allCategories = Category.GetAllCategories();
                 List<Recipe> allRecipes = Recipe.GetAllRecipes();
-                return View["recipes.cshtml", allRecipes];
+
+                model.Add("recipe", allRecipes);
+                model.Add("categories", allCategories);
+                return View["recipes.cshtml", model];
             };
 
             Get["/categories"] = _ => {
@@ -35,6 +46,24 @@ namespace Cookbook
                 newCategory.Save();
                 List<Category> allCategories = Category.GetAllCategories();
                 return View["categories.cshtml", allCategories];
+            };
+            Get["/category/{id}/{name}"] = parameters => {
+
+              Category selectedCategory = Category.Find(parameters.id);
+              List<Recipe> allRecipes = selectedCategory.GetRecipes();
+
+              Dictionary<string, object> model = new Dictionary<string, object>();
+              model.Add("category", selectedCategory);
+              model.Add("recipes", allRecipes);
+
+              return View["category.cshtml", model];
+            };
+
+            Get["/recipe/{id}/{name}"] = parameters => {
+              Recipe selectedRecipe = Recipe.Find(parameters.id);
+              Dictionary<string, object> model = new Dictionary<string, object>();
+              return View["recipe.cshtml", selectedRecipe];
+
             };
         }
     }

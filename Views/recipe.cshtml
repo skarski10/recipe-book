@@ -1,3 +1,14 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
+
+<div class="row">
+    <h1>@Model["recipe"].GetRecipeName()</h1><br>
+    <h3>@Model["recipe"].GetDescription()</h3>
+</div>
+
+<div class="row">
+    <ol>
+        string[] instructionArray    @Model["recipe"].GetInstructions().Split().
+    </ol>
+</div>

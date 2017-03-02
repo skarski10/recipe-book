@@ -10,7 +10,7 @@ namespace Cookbook
     {
 
         public static Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
-        public static Recipe secondRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+        public static Recipe secondRecipe = new Recipe("Ham","A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
         public static Category firstCategory = new Category("Dinner");
 
 
@@ -44,7 +44,7 @@ namespace Cookbook
         public void Test_SaveToDatabase()
         {
             // Arrange
-            Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
+            Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich","Butter Bread. Add Ham. Add Cheese. Eat.");
             firstRecipe.Save();
 
             // Act
@@ -97,6 +97,20 @@ namespace Cookbook
 
             //Assert
             Assert.Equal(firstList, savedRecipes);
+        }
+
+        [Fact]
+        public void Test_InstructionsSplitIntoList()
+        {
+            // Arragne
+            firstRecipe.Save();
+            List<string> testInstructions = new List<string> {"Butter Bread", "Add Ham", "Add Cheese", "Eat"};
+
+            // Act
+            List<string> splitList = firstRecipe.SplitInstructions();
+
+            // Assert
+            Assert.Equal(testInstructions, splitList);
         }
 
 

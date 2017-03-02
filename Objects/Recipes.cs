@@ -136,7 +136,7 @@ namespace Cookbook
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO categories_recipes (recipes_id, categories_id) VALUES (@RecipeId, @CategoryId);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO categories_recipes (categories_id, recipes_id) VALUES (@CategoryId, @RecipeId);", conn);
 
             SqlParameter categoryIdParameter = new SqlParameter ("@CategoryId", newCategory.GetCategoryId());
             cmd.Parameters.Add(categoryIdParameter);
@@ -186,6 +186,21 @@ namespace Cookbook
             return newList;
 
         }
+
+        public List<string> SplitInstructions()
+        {
+            string[] delimiters = { "!","@","#","$","%","^","&","*","_","+","{","}","[","]","|","?","/","<",">", ".", ". "};
+            string[] instructionsArray = this.GetInstructions().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            List<string> instructionList = new List<string>{};
+
+            foreach (var index in instructionsArray)
+            {
+                instructionList.Add(index);
+            }
+
+            return instructionList;
+        }
+
 
 
 

@@ -58,3 +58,8 @@ html {
     padding-top: 20%;
     opacity: .9;
 }
+
+option, select {
+    border-radius: 2px;
+    color: black;
+}
