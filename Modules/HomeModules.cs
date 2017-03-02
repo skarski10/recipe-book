@@ -24,7 +24,6 @@ namespace Cookbook
                 newRecipe.Save();
                 List<Recipe> allRecipes = Recipe.GetAllRecipes();
                 return View["recipes.cshtml", allRecipes];
-
             };
 
         }

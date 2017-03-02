@@ -12,13 +12,13 @@
   <body>
     <div class="container">
       <div class="jumbotron">
-        <h1>Elzar's Kitchen</h1>
+        <h1></h1>
+        <nav>
+            <a href="/"><button type="submit" class="btn">Home Page</button></a>
+            <a href="/categories"><button type="submit" class="btn">Categories</button></a>
+            <a href="/recipes"><button type="submit" class="btn">Recipes</button></a>
+        </nav>
       </div>
-      <nav>
-          <a href="/"><button type="submit" class="btn">Home Page</button></a>
-          <a href="/categories"><button type="submit" class="btn">Categories</button></a>
-          <a href="/recipes"><button type="submit" class="btn">Recipes</button></a>
-      </nav>
       <div class="row">
         @RenderBody()
       </div>

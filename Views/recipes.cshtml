@@ -6,11 +6,12 @@
         <input type="text" name="recipe-name" placeholder="Recipe name">
         <input type="text" name="recipe-description" placeholder="Describe this dish">
         <input type="text" name="recipe-instructions" placeholder="cooking instructions">
+        <br>
         <button type="submit" name="button" class="btn btn-sm">Add Recipe</button>
 </form>
 
 @foreach(var recipe in Model)
 {
     <a href="/recipes/@recipe.GetRecipeId()/@recipe.GetRecipeName()">@recipe.GetRecipeName()</a>
-    <p>@recipe.GetRecipeDescription</p>
+    <p>@recipe.GetDescription()</p>
 }
