@@ -1,8 +1,17 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
-
-<form class="" action="categories.cshtml" method="post">
+<div class="row">
+    <form class="" action="/categories" method="post">
         <input type="text" name="category-name" placeholder="Category name">
         <button type="submit" name="button" class="btn btn-sm">Add Category</button>
-</form>
+    </form>
+</div>
+<div class="row">
+    @foreach(var category in Model)
+    {
+        <ol>
+            <a href="/categories/@category.GetCategoryId()/@category.GetCategoryName()">@category.GetCategoryName()</a>
+        </ol>
+    }
+</div>

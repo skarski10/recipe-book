@@ -14,10 +14,10 @@ namespace Cookbook
             Get["/categories"] = _ => {
                 return View["categories.cshtml"];
             };
+
             Get["/recipes"] = _ => {
                 List<Recipe> allRecipes = Recipe.GetAllRecipes();
                 return View["recipes.cshtml", allRecipes];
-
             };
             Post["/recipes"] = _ => {
                 Recipe newRecipe = new Recipe(Request.Form["recipe-name"], Request.Form["recipe-description"], Request.Form["recipe-instructions"]);
@@ -26,6 +26,16 @@ namespace Cookbook
                 return View["recipes.cshtml", allRecipes];
             };
 
+            Get["/categories"] = _ => {
+                List<Category> allCategories = Category.GetAllCategories();
+                return View["categories.cshtml", allCategories];
+            };
+            Post["/categories"] = _ => {
+                Category newCategory = new Category(Request.Form["category-name"]);
+                newCategory.Save();
+                List<Category> allCategories = Category.GetAllCategories();
+                return View["categories.cshtml", allCategories];
+            };
         }
     }
 }
