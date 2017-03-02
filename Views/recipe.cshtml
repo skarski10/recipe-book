@@ -8,7 +8,31 @@
 </div>
 
 <div class="row">
-    <ol>
-        string[] instructionArray    @Model["recipe"].GetInstructions().Split().
-    </ol>
+    <div class="col-md-6">
+        @foreach(string instruction in @Model["instructions"]){
+            <h4>@instruction</h4>
+        }
+    </div>
+    <div class="col-md-6">
+        <form class="" action="/recipe/@Model["recipe"].GetRecipeId()/@Model["recipe"].GetRecipeName()" method="post">
+            @foreach(var ingredient in @Model["ingredients"]){
+
+                <label for="ingredient">@ingredient.GetIngredientName()
+                    <input type="checkbox" name="ingredient" value="@ingredient.GetIngredientId()">
+                </label>
+            }
+            <button type="submit" name="button">Add ingredients</button>
+        </form>
+    </div>
+
+    @* @if(var ingredient != null)
+    {
+        Ingredient ingredientNeeded = Ingredient.Find(Request.Form["ingredient"]);
+        List<string> ingredientList = new List<string>{};
+        ingredientList.Add(ingredientNeeded);
+    }
+    @else{
+        continue;
+    } *@
+
 </div>

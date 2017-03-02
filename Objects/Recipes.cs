@@ -152,6 +152,29 @@ namespace Cookbook
             }
         }
 
+
+
+        public void AddIngredient(Ingredient newIngredient)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO ingredients_recipes (ingredients_id, recipes_id) VALUES (@IngredientId, @RecipeId);", conn);
+
+            SqlParameter ingredientIdParameter = new SqlParameter ("@IngredientId", newIngredient.GetIngredientId());
+            cmd.Parameters.Add(ingredientIdParameter);
+
+            SqlParameter recipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId());
+            cmd.Parameters.Add(recipeIdParameter);
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+        }
+
         public List<Category> GetCategories()
         {
             SqlConnection conn = DB.Connection();
@@ -195,7 +218,7 @@ namespace Cookbook
 
             foreach (var index in instructionsArray)
             {
-                instructionList.Add(index);
+                instructionList.Add(index.Trim());
             }
 
             return instructionList;

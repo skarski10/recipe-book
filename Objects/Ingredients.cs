@@ -154,15 +154,6 @@ namespace Cookbook
 
         }
 
-
-
-
-
-
-
-
-
-
         public int GetIngredientId()
         {
             return _id;

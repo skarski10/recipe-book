@@ -1,8 +1,12 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
+
+
 <div class="row">
     <form class="" action="/recipes" method="post">
+        <h2>TEST</h2>
+        <hr>
         <input type="text" name="recipe-name" placeholder="Recipe name">
         <input type="text" name="recipe-description" placeholder="Describe this dish">
         <input type="text" name="recipe-instructions" placeholder="cooking instructions">
@@ -25,4 +29,14 @@
             <p>@recipe.GetDescription()</p>
         }
     </ol>
+
+    @* @foreach (var ingredient in @Model["ingredients"])
+    {
+        <input type="checkbox" name="boxtest" value="pie">
+
+    } *@
+
+
+
+
 </div>

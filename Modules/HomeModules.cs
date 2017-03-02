@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nancy;
+using System;
 using Nancy.ViewEngines.Razor;
 
 namespace Cookbook
@@ -24,6 +25,9 @@ namespace Cookbook
                 return View["recipes.cshtml", model];
             };
             Post["/recipes"] = _ => {
+
+                Console.WriteLine("CHeck returns: " + Request.Form["boxtest"]);
+
                 Dictionary<string, object> model = new Dictionary<string, object>();
                 Recipe newRecipe = new Recipe(Request.Form["recipe-name"], Request.Form["recipe-description"], Request.Form["recipe-instructions"]);
                 Category newCategory = Category.Find(Request.Form["assign-category"]);
@@ -49,21 +53,24 @@ namespace Cookbook
             };
             Get["/category/{id}/{name}"] = parameters => {
 
-              Category selectedCategory = Category.Find(parameters.id);
-              List<Recipe> allRecipes = selectedCategory.GetRecipes();
+                Category selectedCategory = Category.Find(parameters.id);
+                List<Recipe> allRecipes = selectedCategory.GetRecipes();
 
-              Dictionary<string, object> model = new Dictionary<string, object>();
-              model.Add("category", selectedCategory);
-              model.Add("recipes", allRecipes);
+                Dictionary<string, object> model = new Dictionary<string, object>();
+                model.Add("category", selectedCategory);
+                model.Add("recipes", allRecipes);
 
-              return View["category.cshtml", model];
+                return View["category.cshtml", model];
             };
 
             Get["/recipe/{id}/{name}"] = parameters => {
-              Recipe selectedRecipe = Recipe.Find(parameters.id);
-              Dictionary<string, object> model = new Dictionary<string, object>();
-              return View["recipe.cshtml", selectedRecipe];
-
+                Dictionary<string, object> model = new Dictionary<string, object>();
+                Recipe selectedRecipe = Recipe.Find(parameters.id);
+                List<Ingredient> ingredientList = Ingredient.GetAllIngredients();
+                model.Add("recipe", selectedRecipe);
+                model.Add("instructions", selectedRecipe.SplitInstructions());
+                model.Add("ingredients", ingredientList);
+                return View["recipe.cshtml", model];
             };
         }
     }
