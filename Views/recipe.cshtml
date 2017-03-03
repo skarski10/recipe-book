@@ -9,30 +9,34 @@
 
 <div class="row">
     <div class="col-md-6">
+        <h3>Instructions:</h3>
+        <hr>
         @foreach(string instruction in @Model["instructions"]){
             <h4>@instruction</h4>
         }
     </div>
     <div class="col-md-6">
-        <form class="" action="/recipe/@Model["recipe"].GetRecipeId()/@Model["recipe"].GetRecipeName()" method="post">
-            @foreach(var ingredient in @Model["ingredients"]){
-
-                <label for="ingredient">@ingredient.GetIngredientName()
-                    <input type="checkbox" name="ingredient" value="@ingredient.GetIngredientId()">
-                </label>
-            }
-            <button type="submit" name="button">Add ingredients</button>
-        </form>
+        <h3>Ingredients:</h3>
+        <hr>
+        @foreach(var ingredient in @Model["recipe"].GetIngredients())
+        {
+            <ul>
+            <li>@ingredient.GetIngredientName()</li>
+            </ul>
+        }
     </div>
-
-    @* @if(var ingredient != null)
-    {
-        Ingredient ingredientNeeded = Ingredient.Find(Request.Form["ingredient"]);
-        List<string> ingredientList = new List<string>{};
-        ingredientList.Add(ingredientNeeded);
-    }
-    @else{
-        continue;
-    } *@
-
+</div>
+<hr>
+<div class="row">
+    <h3>Add Ingredients:</h3>
+    <form class="" action="/recipe/@Model["recipe"].GetRecipeId()/@Model["recipe"].GetRecipeName()" method="post">
+        @foreach(var ingredient in @Model["ingredients"])
+        {
+            <label for="ingredient">@ingredient.GetIngredientName()
+                <input type="checkbox" name="ingredient" value="@ingredient.GetIngredientId()">
+            </label>
+        }
+        <br>
+        <button type="submit" class="btn">Add ingredients</button>
+    </form>
 </div>

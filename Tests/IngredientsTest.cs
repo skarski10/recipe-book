@@ -79,7 +79,7 @@ namespace Cookbook
             Assert.Equal(firstIngredient, foundIngredient);
         }
 
-    
+
 
 
 
@@ -90,6 +90,8 @@ namespace Cookbook
         {
             Ingredient.DeleteAll();
             Recipe.DeleteAll();
+            Category.DeleteAll();
+
         }
     }
 }

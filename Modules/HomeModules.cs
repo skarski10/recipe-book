@@ -26,7 +26,7 @@ namespace Cookbook
             };
             Post["/recipes"] = _ => {
 
-                Console.WriteLine("CHeck returns: " + Request.Form["boxtest"]);
+                Console.WriteLine("Ckeck returns: " + Request.Form["boxtest"]);
 
                 Dictionary<string, object> model = new Dictionary<string, object>();
                 Recipe newRecipe = new Recipe(Request.Form["recipe-name"], Request.Form["recipe-description"], Request.Form["recipe-instructions"]);
@@ -70,6 +70,25 @@ namespace Cookbook
                 model.Add("recipe", selectedRecipe);
                 model.Add("instructions", selectedRecipe.SplitInstructions());
                 model.Add("ingredients", ingredientList);
+                return View["recipe.cshtml", model];
+            };
+
+            Post["/recipe/{id}/{name}"] = parameters => {
+                Dictionary<string, object> model = new Dictionary<string, object>();
+                // Ingredient newIngredient = new Ingredient();
+                Recipe selectedRecipe = Recipe.Find(parameters.id);
+                List<Ingredient> recipeIngredients = new List<Ingredient>{};
+                if (Request.Form["ingredient"] != "")
+                {
+                    var newIngredient = Request.Form["ingredient"];
+                    foreach(var ingredient in Ingredient.Find(newIngredient))
+                    {
+                        selectedRecipe.AddIngredient(ingredient);
+                    }
+                }
+                model.Add("recipe", selectedRecipe);
+                model.Add("instructions", selectedRecipe.SplitInstructions());
+                model.Add("ingredients", recipeIngredients);
                 return View["recipe.cshtml", model];
             };
         }

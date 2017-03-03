@@ -152,29 +152,6 @@ namespace Cookbook
             }
         }
 
-
-
-        public void AddIngredient(Ingredient newIngredient)
-        {
-            SqlConnection conn = DB.Connection();
-            conn.Open();
-
-            SqlCommand cmd = new SqlCommand("INSERT INTO ingredients_recipes (ingredients_id, recipes_id) VALUES (@IngredientId, @RecipeId);", conn);
-
-            SqlParameter ingredientIdParameter = new SqlParameter ("@IngredientId", newIngredient.GetIngredientId());
-            cmd.Parameters.Add(ingredientIdParameter);
-
-            SqlParameter recipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId());
-            cmd.Parameters.Add(recipeIdParameter);
-
-            cmd.ExecuteNonQuery();
-
-            if(conn != null)
-            {
-                conn.Close();
-            }
-        }
-
         public List<Category> GetCategories()
         {
             SqlConnection conn = DB.Connection();
@@ -197,6 +174,61 @@ namespace Cookbook
 
                 Category newCategory = new Category(categoryName, categoryId);
                 newList.Add(newCategory);
+            }
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+            return newList;
+
+        }
+
+        public void AddIngredient(Ingredient newIngredient)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO ingredients_recipes (recipes_id, ingredients_id) VALUES (@RecipeId, @IngredientId);", conn);
+
+            SqlParameter ingredientIdParameter = new SqlParameter ("@IngredientId", newIngredient.GetIngredientId());
+            cmd.Parameters.Add(ingredientIdParameter);
+
+            SqlParameter recipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId());
+            cmd.Parameters.Add(recipeIdParameter);
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+        }
+        public List<Ingredient> GetIngredients()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT ingredients.* FROM recipes JOIN ingredients_recipes ON (recipes.id = ingredients_recipes.recipes_id) JOIN ingredients ON (ingredients_recipes.ingredients_id = ingredients.id) WHERE recipes.id = @RecipeId;", conn);
+
+            SqlParameter RecipeIdParameter = new SqlParameter("@RecipeId", this.GetRecipeId().ToString());
+
+            cmd.Parameters.Add(RecipeIdParameter);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Ingredient> newList = new List<Ingredient>{};
+
+            while(rdr.Read())
+            {
+                int ingredientId = rdr.GetInt32(0);
+                string ingredientName = rdr.GetString(1);
+
+                Ingredient newIngredient = new Ingredient(ingredientName, ingredientId);
+                newList.Add(newIngredient);
             }
             if (rdr != null)
             {

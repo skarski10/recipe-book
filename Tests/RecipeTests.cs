@@ -12,6 +12,7 @@ namespace Cookbook
         public static Recipe firstRecipe = new Recipe("Ham", "A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
         public static Recipe secondRecipe = new Recipe("Ham","A Delicious Ham Sandwich", "Butter Bread. Add Ham. Add Cheese. Eat.");
         public static Category firstCategory = new Category("Dinner");
+        public static Ingredient firstIngredient = new Ingredient("Garlic Powder");
 
 
         public RecipeTest()
@@ -113,6 +114,21 @@ namespace Cookbook
             Assert.Equal(testInstructions, splitList);
         }
 
+        [Fact]
+        public void Test_GetIngredients_ReturnsAllIngredientsInARecipe()
+        {
+            //Arrange
+            firstRecipe.Save();
+            firstIngredient.Save();
+
+            firstRecipe.AddIngredient(firstIngredient);
+            List<Ingredient> savedIngredients = firstRecipe.GetIngredients();
+            List<Ingredient> firstList = new List<Ingredient> {firstIngredient};
+
+            //Assert
+            Assert.Equal(firstList, savedIngredients);
+        }
+
 
 
 
@@ -121,6 +137,7 @@ namespace Cookbook
         {
             Category.DeleteAll();
             Recipe.DeleteAll();
+            Ingredient.DeleteAll();
         }
     }
 }
